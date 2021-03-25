@@ -8,9 +8,11 @@ namespace PromotionEngine.Services
 {
     public abstract class DiscountEngineBase : IDiscountEngine
     {
+        protected IDiscountEngine nextDiscountRule;
+
         public void SetNextRule(IDiscountEngine nextDiscountRule)
         {
-            
+            this.nextDiscountRule = nextDiscountRule;
         }
 
         public abstract void HandleDiscount(Cart cart);
