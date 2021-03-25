@@ -8,16 +8,20 @@ namespace PromotionEngine.Services
 {
     public class CombinationBasedDiscount : DiscountEngineBase
     {
-        private List<Tuple<List<string>, int>> discountRule;
+        private List<CombinationRuleInfo> discountRule;
 
         public CombinationBasedDiscount()
         {
             // this set of rule can be fetched from DB/Service like PromotionRule table 
             // with Promotion type as "CombinationBasedDiscount"            
-            this.discountRule = new List<Tuple<List<string>, int>>();
+            this.discountRule = new List<CombinationRuleInfo>();
 
-            // For item Id C and D with provide discount of 5
-            this.discountRule.Add(new Tuple<List<string>, int>(new List<string>() { "C", "D" }, 5));
+            // For item Id C and D with provide discount of 5            
+            this.discountRule.Add(new CombinationRuleInfo()
+            {
+                ProductIds = new List<string>() { "C", "D" },
+                Discount = 5
+            });
         }
 
         public override void HandleDiscount(Cart cart)
@@ -29,7 +33,7 @@ namespace PromotionEngine.Services
                 foreach (var rule in this.discountRule)
                 {
                     // check if all combination of rule exist in cart
-                    var containsAll = rule.Item1.All(i => cart.ItemToQuantity.Keys.Contains(i));
+                    var containsAll = rule.ProductIds.All(i => cart.ItemToQuantity.Keys.Contains(i));
 
                     if (containsAll)
                     {
@@ -37,16 +41,19 @@ namespace PromotionEngine.Services
                         // there are 4 combination exist hence 4 time discount
 
                         // take first count as minimum
-                        int min = cart.ItemToQuantity[rule.Item1.First()];
+                        int min = cart.ItemToQuantity[rule.ProductIds.First()];
 
                         // need to iterate as we can configure this rule for combination of N number of item
-                        foreach (var item in rule.Item1.Skip(1))
+                        // and take min of N item
+                        foreach (var item in rule.ProductIds.Skip(1))
                         {
                             min = Math.Min(cart.ItemToQuantity[item], min);
                         }
 
                         // apply final discount
-                        cart.DisocuntPrice += min * rule.Item2;
+                        // min indicates minimum number of combination found
+                        // so final disocunt would be (number of combination * discount)
+                        cart.DisocuntPrice += min * rule.Discount;
                     }
                 }
             }

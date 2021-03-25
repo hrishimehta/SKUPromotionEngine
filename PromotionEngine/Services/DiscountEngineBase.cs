@@ -6,11 +6,11 @@ using System.Text;
 
 namespace PromotionEngine.Services
 {
-    public abstract class DiscountEngineBase : IDiscountEngine
+    public abstract class DiscountEngineBase : IDiscountRuleEngine
     {
-        protected IDiscountEngine nextDiscountRule;
+        protected IDiscountRuleEngine nextDiscountRule;
 
-        public void SetNextRule(IDiscountEngine nextDiscountRule)
+        public void SetNextRule(IDiscountRuleEngine nextDiscountRule)
         {
             this.nextDiscountRule = nextDiscountRule;
         }

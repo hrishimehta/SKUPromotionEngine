@@ -5,9 +5,9 @@ using System.Text;
 
 namespace PromotionEngine.Interfaces
 {
-    public interface IDiscountEngine
+    public interface IDiscountRuleEngine
     {
-        void SetNextRule(IDiscountEngine nextDiscountRule);
+        void SetNextRule(IDiscountRuleEngine nextDiscountRule);
 
         void HandleDiscount(Cart cart);
     }

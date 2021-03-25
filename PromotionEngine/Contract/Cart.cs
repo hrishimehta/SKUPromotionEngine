@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace PromotionEngine.Contract
 {
@@ -9,6 +7,7 @@ namespace PromotionEngine.Contract
     {
         public List<CartItem> Items { get; set; }
 
+        // keeping this int but can be change as object to show breakdown of discount
         public int DisocuntPrice { get; set; }
 
         public Dictionary<string, int> ItemToQuantity

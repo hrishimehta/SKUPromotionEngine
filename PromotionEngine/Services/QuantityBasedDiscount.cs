@@ -1,24 +1,22 @@
-﻿using PromotionEngine.Contract;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using PromotionEngine.Contract;
 
 namespace PromotionEngine.Services
 {
     public class QuantityBasedDiscount : DiscountEngineBase
     {
-        private List<Tuple<string, int, int>> discountRule;
+        private List<QuantityBasedRuleInfo> discountRule;
 
         public QuantityBasedDiscount()
         {
             // this set of rule can be fetched from DB like PromotionRule table 
             // with Promotion type as "QuantityBaseDiscount"            
-            this.discountRule = new List<Tuple<string, int, int>>();
+            this.discountRule = new List<QuantityBasedRuleInfo>();
 
             // For item Id A with 3 Quantity provide discount of 20
-            this.discountRule.Add(new Tuple<string, int, int>("A", 3, 20));
-            this.discountRule.Add(new Tuple<string, int, int>("B", 2, 15));
+            this.discountRule.Add(new QuantityBasedRuleInfo("A", 3, 20));
+            this.discountRule.Add(new QuantityBasedRuleInfo("B", 2, 15));
         }
 
         public override void HandleDiscount(Cart cart)
@@ -27,10 +25,10 @@ namespace PromotionEngine.Services
             {
                 foreach (var rule in this.discountRule)
                 {
-                    if (cart.Items.Any(item => item.ProductInfo.Id.Equals(rule.Item1)))
+                    if (cart.Items.Any(item => item.ProductInfo.Id.Equals(rule.ProductId)))
                     {
-                        var item = cart.Items.First(item => item.ProductInfo.Id.Equals(rule.Item1));
-                        var totalDiscountForItem = (item.Quantity / rule.Item2) * rule.Item3;
+                        var item = cart.Items.First(item => item.ProductInfo.Id.Equals(rule.ProductId));
+                        var totalDiscountForItem = (item.Quantity / rule.Quantity) * rule.Discount;
                         cart.DisocuntPrice += totalDiscountForItem;
                     }
                 }
