@@ -10,6 +10,11 @@ namespace PromotionEngine.Services
     {
         private IDiscountEngine ruleEngine;
 
+        public PromotionEngine()
+        {
+            this.SetDiscountSequence();
+        }
+
         public void SetDiscountSequence()
         {
             // for more customization like to include specific rule,exclude rule, controlling sequence
