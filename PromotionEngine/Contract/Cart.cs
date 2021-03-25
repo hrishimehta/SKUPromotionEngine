@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PromotionEngine.Contract
@@ -30,6 +31,15 @@ namespace PromotionEngine.Contract
                 }
 
                 return dict;
+            }
+        }
+
+
+        public int TotalPrice
+        {
+            get
+            {
+                return this.Items.Sum(item => item.Price) - DisocuntPrice;
             }
         }
     }
